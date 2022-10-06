@@ -45,7 +45,7 @@ export default class Start extends Component {
                   //sets background color for chat screen to this color (black)
                   onPress={() => this.setState({ color: "#090C08" })}
                   //extends the "touchable" range beyond rendered dimensions
-                  hitSlop={{ top: 22, bottom: 22, left: 10, right: 15 }}
+                  hitSlop={{ top: 22, bottom: 22, left: 15, right: 10 }}
                 />
                 <Pressable
                   style={({ pressed }) => [
