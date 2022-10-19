@@ -3,6 +3,7 @@ import { View, Platform, KeyboardAvoidingView, StyleSheet } from "react-native";
 import { GiftedChat, Bubble } from "react-native-gifted-chat";
 
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 export default class Chat extends Component {
   constructor() {
@@ -21,6 +22,14 @@ export default class Chat extends Component {
     };
 
     const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function getMessages(db) {
+      const messagesCol = collection(db, "messages");
+      const messagesSnapshot = await getDocs(messagesCol);
+      const messagesList = messagesSnapshot.docs.map((doc) => doc.data());
+      return messagesList;
+    }
   }
 
   componentDidMount() {
