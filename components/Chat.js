@@ -4,6 +4,16 @@ import { GiftedChat, Bubble } from "react-native-gifted-chat";
 
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { ThemeContext } from "react-navigation";
+
+async function getMessages(db) {
+  const messagesCol = collection(db, "messages");
+  //console.log(messagesCol);
+  const messagesSnapshot = await getDocs(messagesCol);
+  //console.log(messagesSnapshot);
+  const messagesList = messagesSnapshot.docs.map((doc) => doc.data());
+  return messagesList;
+}
 
 export default class Chat extends Component {
   constructor() {
@@ -22,17 +32,17 @@ export default class Chat extends Component {
     };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    async function getMessages(db) {
-      const messagesCol = collection(db, "messages");
-      const messagesSnapshot = await getDocs(messagesCol);
-      const messagesList = messagesSnapshot.docs.map((doc) => doc.data());
-      return messagesList;
-    }
+    this.db = getFirestore(app);
   }
 
   componentDidMount() {
+    getMessages(this.db)
+      .then((res) => {
+        console.log(this.messagesCol);
+      })
+      .catch((err) => {
+        console.log("nope");
+      });
     //passes name entered from Start screen to title
     let { name } = this.props.route.params;
     this.props.navigation.setOptions({ title: name });
